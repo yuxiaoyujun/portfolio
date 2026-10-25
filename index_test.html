@@ -1,0 +1,2450 @@
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0" />
+		<title>BAIXUE ♡ 作品集</title>
+		<style>
+			@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@400;500;700&display=swap");
+
+			:root {
+				--bg: #fff5fa; /* 奶油粉白底 */
+				--panel: #ffffff;
+				--ink: #5b4a5e; /* 梅紫墨色，比纯黑软 */
+				--sub: #a78fa8;
+				--pink: #ff8fc7;
+				--pink-deep: #f56fb2;
+				--lav: #c9a7ff;
+				--mint: #8ce0c8;
+				--yellow: #ffd66e;
+				--line: #f6dcee;
+				--shadow: 5px 5px 0 rgba(91, 74, 94, 0.14); /* 贴纸感硬阴影 */
+			}
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+			html {
+				scroll-behavior: smooth;
+			}
+			body {
+				background: var(--bg);
+				color: var(--ink);
+				overflow-x: hidden;
+				font-family: "Baloo 2", "Noto Sans SC", "ZCOOL KuaiLe", sans-serif;
+				line-height: 1.7;
+				cursor: none;
+			}
+			a {
+				color: inherit;
+				text-decoration: none;
+				cursor: none;
+			}
+			img {
+				display: block;
+				width: 100%;
+				border-radius: 18px;
+			}
+			::selection {
+				background: var(--pink);
+				color: #fff;
+			}
+			.cute {
+				font-family: "ZCOOL KuaiLe", "Baloo 2", sans-serif;
+			}
+
+			/* ===== 自定义光标：粉色小球 + 圆环 ===== */
+			.cursor {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 14px;
+				height: 14px;
+				border-radius: 50%;
+				background: var(--pink);
+				pointer-events: none;
+				z-index: 9999;
+				transform: translate(-50%, -50%);
+				box-shadow: 0 0 0 3px rgba(255, 143, 199, 0.3);
+			}
+			.cursor-ring {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 38px;
+				height: 38px;
+				border-radius: 50%;
+				border: 2px solid var(--pink);
+				pointer-events: none;
+				z-index: 9998;
+				transform: translate(-50%, -50%);
+				transition:
+					width 0.25s,
+					height 0.25s,
+					opacity 0.25s;
+				opacity: 0.55;
+			}
+			body.hovering .cursor-ring {
+				width: 56px;
+				height: 56px;
+				opacity: 1;
+				background: rgba(255, 143, 199, 0.12);
+			}
+			@media (hover: none) {
+				.cursor,
+				.cursor-ring {
+					display: none;
+				}
+				body,
+				a {
+					cursor: auto;
+				}
+			}
+
+			/* ===== 加载屏 ===== */
+			#loader {
+				position: fixed;
+				inset: 0;
+				background: var(--bg);
+				z-index: 10000;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-direction: column;
+				gap: 24px;
+				transition:
+					opacity 0.6s,
+					visibility 0.6s;
+			}
+			#loader.done {
+				opacity: 0;
+				visibility: hidden;
+			}
+			#loader .face {
+				font-size: 44px;
+				animation: bounce 1s infinite;
+			}
+			#loader .dots {
+				display: flex;
+				gap: 8px;
+			}
+			#loader .dots i {
+				width: 12px;
+				height: 12px;
+				border-radius: 50%;
+				background: var(--pink);
+				animation: bounce 1s infinite;
+			}
+			#loader .dots i:nth-child(2) {
+				background: var(--lav);
+				animation-delay: 0.15s;
+			}
+			#loader .dots i:nth-child(3) {
+				background: var(--mint);
+				animation-delay: 0.3s;
+			}
+			#loader .tip {
+				font-size: 13px;
+				color: var(--sub);
+				letter-spacing: 2px;
+			}
+			@keyframes bounce {
+				0%,
+				100% {
+					transform: translateY(0);
+				}
+				50% {
+					transform: translateY(-10px);
+				}
+			}
+
+			/* ===== 背景 3D 画布 + 漂浮装饰 ===== */
+			#bg3d {
+				position: fixed;
+				inset: 0;
+				z-index: 0;
+				pointer-events: none;
+			}
+			.float-deco {
+				position: fixed;
+				z-index: 0;
+				pointer-events: none;
+				opacity: 0.5;
+				animation: floaty 6s ease-in-out infinite;
+			}
+			@keyframes floaty {
+				0%,
+				100% {
+					transform: translateY(0) rotate(-6deg);
+				}
+				50% {
+					transform: translateY(-18px) rotate(6deg);
+				}
+			}
+			.content {
+				position: relative;
+				z-index: 1;
+			}
+
+			/* ===== 导航（左侧竖排胶囊）===== */
+			nav {
+				position: fixed;
+				left: 18px;
+				top: 50%;
+				transform: translateY(-50%);
+				z-index: 100;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 10px;
+				background: rgba(255, 255, 255, 0.9);
+				backdrop-filter: blur(12px);
+				-webkit-backdrop-filter: blur(12px);
+				border: 2px solid var(--line);
+				border-radius: 30px;
+				box-shadow: var(--shadow);
+				padding: 16px 10px;
+			}
+			nav .logo {
+				font-family: "ZCOOL KuaiLe";
+				font-weight: 700;
+				font-size: 15px;
+				color: var(--pink-deep);
+				padding: 2px 6px;
+				transition: transform 0.3s;
+				display: inline-block;
+			}
+			nav .logo:hover {
+				transform: rotate(-8deg) scale(1.12);
+			}
+			nav .links {
+				display: flex;
+				flex-direction: column;
+				gap: 6px;
+			}
+			nav .links a {
+				font-size: 13px;
+				padding: 8px 16px;
+				border-radius: 999px;
+				color: var(--sub);
+				text-align: center;
+				transition: all 0.25s;
+				font-weight: 500;
+				white-space: nowrap;
+			}
+			nav .links a:hover {
+				background: var(--pink);
+				color: #fff;
+				transform: translateX(3px) rotate(-2deg);
+			}
+			nav .links a.active {
+				background: var(--pink);
+				color: #fff;
+			}
+
+			section {
+				max-width: 1120px;
+				margin: 0 auto;
+				padding: 70px 32px;
+			}
+
+			/* ===== HERO ===== */
+			.hero {
+				min-height: 100vh;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				text-align: center;
+				position: relative;
+				padding: 0 24px;
+			}
+			.hero .badge {
+				display: inline-block;
+				background: #fff;
+				border: 2px solid var(--line);
+				border-radius: 999px;
+				padding: 8px 22px;
+				font-size: 14px;
+				color: var(--sub);
+				box-shadow: var(--shadow);
+				margin-bottom: 28px;
+				transform: rotate(-2deg);
+			}
+			.hero h1 {
+				font-family: "ZCOOL KuaiLe";
+				font-size: clamp(44px, 8.5vw, 104px);
+				line-height: 1.15;
+				letter-spacing: 2px;
+			}
+			.hero h1 .p {
+				color: var(--pink-deep);
+			}
+			.hero h1 .l {
+				color: var(--lav);
+			}
+			.hero h1 .o {
+				color: var(--ink);
+				text-shadow:
+					3px 3px 0 #ffe3f1,
+					6px 6px 0 rgba(201, 167, 255, 0.4);
+			}
+			.hero .role {
+				margin-top: 26px;
+				font-size: clamp(15px, 2vw, 19px);
+				color: var(--sub);
+				max-width: 560px;
+			}
+			.hero .role b {
+				color: var(--pink-deep);
+			}
+			.hero .cta {
+				margin-top: 36px;
+				display: flex;
+				gap: 16px;
+			}
+			.btn {
+				display: inline-block;
+				padding: 14px 34px;
+				border-radius: 999px;
+				font-size: 16px;
+				font-weight: 700;
+				border: 2px solid var(--ink);
+				transition:
+					transform 0.2s,
+					box-shadow 0.2s;
+			}
+			.btn.primary {
+				background: var(--pink);
+				color: #fff;
+				box-shadow: var(--shadow);
+			}
+			.btn.ghost {
+				background: #fff;
+				color: var(--ink);
+				box-shadow: var(--shadow);
+			}
+			.btn:hover {
+				transform: translate(-2px, -2px) rotate(-1deg);
+				box-shadow: 8px 8px 0 rgba(91, 74, 94, 0.18);
+			}
+			.hero .deco-star {
+				position: absolute;
+				font-size: 34px;
+				animation: floaty 5s ease-in-out infinite;
+			}
+			.hero .d1 {
+				top: 22%;
+				left: 14%;
+			}
+			.hero .d2 {
+				top: 30%;
+				right: 12%;
+				animation-delay: 1.2s;
+			}
+			.hero .d3 {
+				bottom: 26%;
+				left: 20%;
+				animation-delay: 2s;
+				font-size: 26px;
+			}
+			/* ===== 跑马灯 ===== */
+			.marquee {
+				overflow: hidden;
+				white-space: nowrap;
+				position: relative;
+				z-index: 1;
+				padding: 18px 0;
+				background: #fff;
+				border-top: 2px solid var(--line);
+				border-bottom: 2px solid var(--line);
+			}
+			.marquee .track {
+				display: inline-block;
+				animation: scroll 26s linear infinite;
+				font-size: 16px;
+				font-weight: 700;
+				letter-spacing: 3px;
+				color: var(--sub);
+			}
+			.marquee .track span {
+				margin: 0 26px;
+			}
+			.marquee .track span.hl {
+				color: var(--pink-deep);
+			}
+			.marquee .track span i {
+				font-style: normal;
+				color: var(--yellow);
+				margin-right: 26px;
+			}
+			@keyframes scroll {
+				to {
+					transform: translateX(-50%);
+				}
+			}
+
+			/* ===== 标题 ===== */
+			.sec-head {
+				text-align: center;
+				margin-bottom: 56px;
+				scroll-margin-top: 100px;
+			}
+			.sec-head .num {
+				display: inline-block;
+				background: #fff;
+				border: 2px solid var(--line);
+				border-radius: 999px;
+				padding: 4px 18px;
+				font-size: 12px;
+				letter-spacing: 3px;
+				color: var(--sub);
+				box-shadow: var(--shadow);
+				transform: rotate(-1.5deg);
+				margin-bottom: 16px;
+			}
+			.sec-head h2 {
+				font-family: "ZCOOL KuaiLe";
+				font-size: clamp(32px, 4.5vw, 52px);
+				letter-spacing: 4px;
+			}
+			.sec-head h2 em {
+				font-style: normal;
+				color: var(--pink-deep);
+			}
+
+			/* ===== 3D 展厅 ===== */
+			.stage {
+				position: relative;
+				border: 3px solid var(--ink);
+				border-radius: 28px;
+				overflow: hidden;
+				background: linear-gradient(
+					160deg,
+					#ffeef7 0%,
+					#f3ecff 55%,
+					#e8fbf4 100%
+				);
+				box-shadow: 8px 8px 0 rgba(91, 74, 94, 0.14);
+			}
+			.stage canvas {
+				display: block;
+				width: 100%;
+				height: 60vh;
+				cursor: grab;
+				border-radius: 24px;
+			}
+			.stage canvas:active {
+				cursor: grabbing;
+			}
+			.stage .hint {
+				position: absolute;
+				bottom: 14px;
+				left: 50%;
+				transform: translateX(-50%);
+				background: rgba(255, 255, 255, 0.9);
+				border: 2px solid var(--line);
+				border-radius: 999px;
+				padding: 5px 18px;
+				font-size: 13px;
+				color: var(--sub);
+				pointer-events: none;
+			}
+
+			.stage .fallback {
+				position: absolute;
+				inset: 0;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: var(--sub);
+				font-size: 15px;
+				pointer-events: none;
+				text-align: center;
+				padding: 20px;
+			}
+
+			/* ===== 作品 ===== */
+			.works {
+				display: flex;
+				flex-direction: column;
+				gap: 72px;
+			}
+			.work {
+				display: grid;
+				grid-template-columns: 1.15fr 1fr;
+				gap: 52px;
+				align-items: center;
+			}
+			.work:nth-child(even) {
+				direction: rtl;
+			}
+			.work > * {
+				direction: ltr;
+			}
+			.work .visual {
+				background: #fff;
+				border: 3px solid var(--ink);
+				border-radius: 24px;
+				padding: 14px;
+				box-shadow: var(--shadow);
+				transform-style: preserve-3d;
+				will-change: transform;
+			}
+			.work .visual .img-wrap {
+				border-radius: 14px;
+				overflow: hidden;
+			}
+			.work .visual img {
+				aspect-ratio: 4/3;
+				object-fit: cover;
+				border-radius: 14px;
+				transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+			}
+			.work .visual:hover img {
+				transform: scale(1.06) rotate(1deg);
+			}
+			.work .info .idx {
+				display: inline-block;
+				font-size: 13px;
+				letter-spacing: 2px;
+				color: #fff;
+				background: var(--lav);
+				border-radius: 999px;
+				padding: 3px 16px;
+				margin-bottom: 14px;
+				transform: rotate(-2deg);
+			}
+			.work .info h3 {
+				font-family: "ZCOOL KuaiLe";
+				font-size: clamp(24px, 3vw, 34px);
+				margin-bottom: 14px;
+				letter-spacing: 2px;
+			}
+			.work .info p {
+				color: var(--sub);
+				font-size: 15px;
+				margin-bottom: 22px;
+			}
+			.work .tags {
+				display: flex;
+				gap: 6px 14px;
+				flex-wrap: wrap;
+			}
+			.work .tags span {
+				font-size: 13px;
+				font-weight: 500;
+				color: var(--sub);
+				transition: color 0.25s;
+			}
+			.work .tags span::before {
+				content: "✦ ";
+				color: var(--pink);
+			}
+			.work .tags span:hover {
+				color: var(--pink-deep);
+			}
+
+			/* ===== 作品走马灯轮播 ===== */
+			.slider {
+				position: relative;
+				aspect-ratio: 4/3;
+				border-radius: 14px;
+				overflow: hidden;
+				background: #fdf3f8;
+			}
+			.s-track {
+				display: flex;
+				height: 100%;
+				will-change: transform;
+			}
+			.s-track img {
+				flex: 0 0 100%;
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+			.s-arrow {
+				position: absolute;
+				top: 50%;
+				transform: translateY(-50%);
+				z-index: 3;
+				width: 46px;
+				height: 46px;
+				border-radius: 50%;
+				border: 2px solid var(--ink);
+				background: rgba(255, 255, 255, 0.92);
+				color: var(--pink-deep);
+				font-size: 24px;
+				font-weight: 800;
+				line-height: 1;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				cursor: none;
+				opacity: 0;
+				transition: all 0.25s;
+				box-shadow: var(--shadow);
+			}
+			.slider:hover .s-arrow {
+				opacity: 1;
+			}
+			.s-arrow:hover {
+				background: var(--pink);
+				color: #fff;
+				transform: translateY(-50%) scale(1.12);
+			}
+			.s-arrow.prev {
+				left: 14px;
+			}
+			.s-arrow.next {
+				right: 14px;
+			}
+			@media (hover: none) {
+				.s-arrow {
+					display: none;
+				}
+			}
+			.s-counter {
+				position: absolute;
+				right: 14px;
+				bottom: 12px;
+				z-index: 3;
+				background: rgba(255, 255, 255, 0.92);
+				border: 2px solid var(--line);
+				border-radius: 999px;
+				padding: 2px 12px;
+				font-size: 12px;
+				font-weight: 700;
+				color: var(--sub);
+			}
+
+			/* ===== 关于 ===== */
+			.about-wrap {
+				max-width: 720px;
+				margin: 0 auto;
+			}
+			.about-wrap p.big {
+				font-family: "ZCOOL KuaiLe";
+				font-size: clamp(21px, 2.6vw, 29px);
+				margin-bottom: 26px;
+				letter-spacing: 1px;
+			}
+			.about-wrap p.big em {
+				font-style: normal;
+				color: var(--pink-deep);
+			}
+			.about-wrap p {
+				color: var(--sub);
+				font-size: 15px;
+				margin-bottom: 16px;
+			}
+			.skills {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+				gap: 18px;
+				margin-top: 44px;
+			}
+			.skill {
+				border: 2px solid var(--line);
+				border-radius: 22px;
+				padding: 30px 18px;
+				text-align: center;
+				transition: all 0.3s;
+				box-shadow: var(--shadow);
+				background: linear-gradient(160deg, #ffffff 0%, var(--tint) 100%);
+			}
+			.skill:nth-child(1) {
+				--tint: #ffeef7;
+			}
+			.skill:nth-child(2) {
+				--tint: #f3ecff;
+			}
+			.skill:nth-child(3) {
+				--tint: #e8fbf4;
+			}
+			.skill:nth-child(4) {
+				--tint: #fff8e8;
+			}
+			.skill:hover {
+				transform: translateY(-6px) rotate(-2deg);
+				border-color: var(--pink);
+			}
+			.skill .v {
+				font-family: "ZCOOL KuaiLe";
+				font-size: 30px;
+				color: var(--pink-deep);
+				letter-spacing: 4px;
+			}
+			.skill .k {
+				font-size: 13px;
+				color: var(--sub);
+				margin-top: 10px;
+				letter-spacing: 1px;
+			}
+			@keyframes wobble {
+				0% {
+					transform: rotate(0);
+				}
+				25% {
+					transform: rotate(-3deg);
+				}
+				50% {
+					transform: rotate(2deg);
+				}
+				75% {
+					transform: rotate(-1deg);
+				}
+				100% {
+					transform: rotate(0);
+				}
+			}
+			.skill:hover {
+				animation: wobble 0.5s ease;
+			}
+
+			.about-wrap p {
+				color: var(--sub);
+				font-size: 15px;
+				margin-bottom: 16px;
+			}
+			.skills {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+				gap: 18px;
+				margin-top: 44px;
+			}
+			.skill {
+				background: #fff;
+				border: 2px solid var(--line);
+				border-radius: 20px;
+				padding: 22px;
+				text-align: center;
+				transition: all 0.3s;
+				box-shadow: var(--shadow);
+			}
+			.skill:hover {
+				transform: translateY(-6px) rotate(-2deg);
+				border-color: var(--pink);
+			}
+			.skill .v {
+				font-family: "ZCOOL KuaiLe";
+				font-size: 20px;
+				color: var(--pink-deep);
+			}
+			.skill .k {
+				font-size: 12px;
+				color: var(--sub);
+				margin-top: 4px;
+			}
+
+			/* ===== 联系 ===== */
+			.contact-sec {
+				text-align: center;
+				padding-bottom: 160px;
+			}
+			.contact-sec .mail {
+				display: inline-block;
+				margin-top: 28px;
+				font-family: "ZCOOL KuaiLe";
+				font-size: clamp(22px, 4vw, 42px);
+				letter-spacing: 1px;
+				color: var(--pink-deep);
+				background: #fff;
+				border: 3px solid var(--ink);
+				border-radius: 999px;
+				padding: 16px 44px;
+				box-shadow: var(--shadow);
+				transition: transform 0.25s;
+			}
+			.contact-sec .mail:hover {
+				transform: translate(-2px, -2px) rotate(-1deg);
+			}
+
+			footer {
+				border-top: 2px solid var(--line);
+				background: #fff;
+				padding: 30px 40px;
+				display: flex;
+				justify-content: space-between;
+				color: var(--sub);
+				font-size: 13px;
+				position: relative;
+				z-index: 1;
+			}
+
+			/* ===== 追加动效 ===== */
+			/* 顶部滚动进度条 */
+			#progress {
+				position: fixed;
+				top: 0;
+				left: 0;
+				height: 4px;
+				width: 0;
+				z-index: 10001;
+				border-radius: 0 4px 4px 0;
+				background: linear-gradient(
+					90deg,
+					var(--pink),
+					var(--lav),
+					var(--mint)
+				);
+			}
+
+			/* 点击小星星迸发 */
+			.spark {
+				position: fixed;
+				z-index: 9999;
+				pointer-events: none;
+				font-size: 16px;
+				font-weight: 700;
+				animation: sparkfly 0.9s ease-out forwards;
+			}
+			@keyframes sparkfly {
+				to {
+					transform: translate(var(--dx), var(--dy)) rotate(200deg) scale(0.2);
+					opacity: 0;
+				}
+			}
+
+			/* 英雄区标题逐字悬停跳舞 */
+			.hero h1 .ch {
+				display: inline-block;
+				transition:
+					transform 0.25s,
+					color 0.25s;
+				white-space: pre;
+			}
+			.hero h1 .ch:hover {
+				transform: translateY(-10px) rotate(-8deg) scale(1.12);
+				color: var(--pink-deep);
+			}
+			.hero h1 .l .ch:hover {
+				color: var(--pink-deep);
+			}
+
+			/* 按钮按压Q弹 + 吸磁由JS控制 */
+			.btn {
+				transition:
+					transform 0.2s,
+					box-shadow 0.2s;
+			}
+			.btn:active {
+				transform: scale(0.9) !important;
+			}
+
+			/* 技能卡悬停摇摆 */
+			@keyframes wobble {
+				0% {
+					transform: rotate(0);
+				}
+				25% {
+					transform: rotate(-3deg);
+				}
+				50% {
+					transform: rotate(2deg);
+				}
+				75% {
+					transform: rotate(-1deg);
+				}
+				100% {
+					transform: rotate(0);
+				}
+			}
+			.skill:hover {
+				animation: wobble 0.5s ease;
+			}
+
+			/* 跑马灯悬停暂停 */
+			.marquee:hover .track {
+				animation-play-state: paused;
+			}
+
+			/* 作品信息轻微呼吸浮动 */
+			@keyframes breathe {
+				0%,
+				100% {
+					transform: translateY(0);
+				}
+				50% {
+					transform: translateY(-7px);
+				}
+			}
+			.work .info {
+				animation: breathe 6s ease-in-out infinite;
+			}
+			.work:nth-child(2) .info {
+				animation-delay: 1.5s;
+			}
+			.work:nth-child(3) .info {
+				animation-delay: 3s;
+			}
+			.work:nth-child(4) .info {
+				animation-delay: 4.5s;
+			}
+
+			/* 3D 展厅整体呼吸 */
+			.stage {
+				animation: breathe 7s ease-in-out infinite;
+			}
+
+			/* 导航 logo 悬停摇摆 */
+			nav .logo {
+				transition: transform 0.3s;
+				display: inline-block;
+			}
+			nav .logo:hover {
+				transform: rotate(-8deg) scale(1.12);
+			}
+
+			/* 小星星装饰闪烁 */
+			@keyframes twinkle {
+				0%,
+				100% {
+					opacity: 0.5;
+					transform: scale(1);
+				}
+				50% {
+					opacity: 1;
+					transform: scale(1.25);
+				}
+			}
+			.float-deco {
+				animation:
+					floaty 6s ease-in-out infinite,
+					twinkle 3s ease-in-out infinite;
+			}
+
+			/* ===== Q版萌娘（插画版）===== */
+			#chibi {
+				display: none;
+				position: fixed;
+				right: 14px;
+				bottom: 0;
+				width: clamp(130px, 15vw, 200px);
+				z-index: 5;
+				pointer-events: none;
+				will-change: transform;
+			}
+			#chibi img {
+				width: 100%;
+				display: block;
+				filter: drop-shadow(0 10px 18px rgba(245, 111, 178, 0.3));
+				animation: bob 4s ease-in-out infinite;
+				transform-origin: bottom center;
+			}
+			@keyframes bob {
+				0%,
+				100% {
+					transform: translateY(0) rotate(-1deg);
+				}
+				50% {
+					transform: translateY(-9px) rotate(1.5deg);
+				}
+			}
+			.chibi-bubble {
+				display: none;
+				position: fixed;
+				right: calc(clamp(130px, 15vw, 200px) + 24px);
+				bottom: 160px;
+				z-index: 5;
+				pointer-events: none;
+				background: #fff;
+				border: 2px solid var(--line);
+				border-radius: 16px;
+				padding: 8px 16px;
+				font-size: 13px;
+				font-weight: 700;
+				color: var(--pink-deep);
+				box-shadow: var(--shadow);
+				transform: rotate(-3deg);
+				animation: bob 4s ease-in-out infinite;
+			}
+			.chibi-bubble::after {
+				content: "";
+				position: absolute;
+				right: -8px;
+				bottom: 8px;
+				width: 12px;
+				height: 12px;
+				background: #fff;
+				border-top: 2px solid var(--line);
+				border-right: 2px solid var(--line);
+				transform: rotate(45deg);
+			}
+			@media (max-width: 700px) {
+				.chibi-bubble {
+					display: none;
+				}
+			}
+
+			/* ===== 背景粉彩 blob ===== */
+			.blob {
+				position: fixed;
+				z-index: 0;
+				pointer-events: none;
+				border-radius: 50%;
+				filter: blur(60px);
+				opacity: 0.55;
+			}
+			.blob.b1 {
+				width: 420px;
+				height: 420px;
+				background: #ffd9ec;
+				top: -120px;
+				left: -120px;
+				animation: blobdrift 26s ease-in-out infinite alternate;
+			}
+			.blob.b2 {
+				width: 380px;
+				height: 380px;
+				background: #e4d6ff;
+				bottom: -100px;
+				left: 22%;
+				animation: blobdrift 32s ease-in-out infinite alternate-reverse;
+			}
+			.blob.b3 {
+				width: 320px;
+				height: 320px;
+				background: #d2f4e8;
+				top: 16%;
+				right: -100px;
+				animation: blobdrift 29s ease-in-out infinite alternate;
+			}
+			@keyframes blobdrift {
+				to {
+					transform: translate(60px, 40px) scale(1.15);
+				}
+			}
+
+			/* ===== 背景填充层 ===== */
+			/* 波点底纹 */
+			#dots {
+				position: fixed;
+				inset: 0;
+				z-index: 0;
+				pointer-events: none;
+				background-image:
+					radial-gradient(rgba(245, 111, 178, 0.12) 1.6px, transparent 1.7px),
+					radial-gradient(rgba(201, 167, 255, 0.12) 1.6px, transparent 1.7px);
+				background-size: 46px 46px;
+				background-position:
+					0 0,
+					23px 23px;
+			}
+
+			/* 云朵 */
+			.cloud {
+				position: fixed;
+				z-index: 0;
+				pointer-events: none;
+				background: #fff;
+				opacity: 0.85;
+				border-radius: 999px;
+				filter: blur(1px);
+			}
+			.cloud::before,
+			.cloud::after {
+				content: "";
+				position: absolute;
+				background: #fff;
+				border-radius: 50%;
+			}
+			.cloud::before {
+				width: 55%;
+				height: 160%;
+				left: 14%;
+				top: -70%;
+			}
+			.cloud::after {
+				width: 38%;
+				height: 110%;
+				right: 14%;
+				top: -40%;
+			}
+			@keyframes drift {
+				from {
+					transform: translateX(-16vw);
+				}
+				to {
+					transform: translateX(112vw);
+				}
+			}
+
+			/* 上升的小符号 */
+			.riser {
+				position: fixed;
+				bottom: -40px;
+				z-index: 0;
+				pointer-events: none;
+				animation: rise linear infinite;
+				opacity: 0;
+			}
+			@keyframes rise {
+				0% {
+					transform: translateY(0) rotate(0);
+					opacity: 0;
+				}
+				8% {
+					opacity: 0.8;
+				}
+				92% {
+					opacity: 0.6;
+				}
+				100% {
+					transform: translateY(-112vh) rotate(40deg);
+					opacity: 0;
+				}
+			}
+
+			/* ===== 重力标签雨 ===== */
+			#tagRain {
+				position: fixed;
+				inset: 0;
+				z-index: 3;
+				pointer-events: none;
+				overflow: hidden;
+			}
+			.ptag {
+				position: absolute;
+				left: 0;
+				top: 0;
+				white-space: nowrap;
+				background: rgba(255, 255, 255, 0.88);
+				border: 2px solid;
+				border-radius: 999px;
+				padding: 4px 16px;
+				font-size: 13px;
+				font-weight: 700;
+				box-shadow: 3px 3px 0 rgba(91, 74, 94, 0.1);
+				will-change: transform;
+			}
+
+			.reveal {
+				opacity: 0;
+				transform: translateY(44px);
+			}
+
+			@media (min-width: 861px) {
+				.content {
+					padding-left: 64px;
+				}
+			}
+			@media (max-width: 860px) {
+				nav {
+					left: 50%;
+					top: auto;
+					bottom: 14px;
+					transform: translateX(-50%);
+					flex-direction: row;
+					padding: 10px 14px;
+					border-radius: 999px;
+				}
+				nav .links {
+					flex-direction: row;
+					gap: 4px;
+				}
+				nav .links a {
+					padding: 6px 12px;
+					font-size: 12px;
+				}
+				.work {
+					grid-template-columns: 1fr;
+				}
+				section {
+					padding: 100px 20px;
+				}
+				.hero .deco-star {
+					display: none;
+				}
+				nav {
+					gap: 4px;
+					padding: 8px 10px;
+				}
+				nav .links a {
+					padding: 6px 10px;
+					font-size: 13px;
+				}
+				.stage canvas {
+					height: 50vh;
+				}
+				footer {
+					flex-direction: column;
+					gap: 8px;
+					text-align: center;
+				}
+			}
+		</style>
+		<base target="_blank" />
+	</head>
+	<body>
+		<div id="loader">
+			<div class="face">♡(´∀｀*)</div>
+			<div class="dots"><i></i><i></i><i></i></div>
+			<div class="tip">正在准备惊喜，马上好 ♡</div>
+		</div>
+		<div
+			id="tagRain"
+			aria-hidden="true"></div>
+		<div id="progress"></div>
+		<div
+			class="cursor"
+			id="cursor"></div>
+		<div
+			class="cursor-ring"
+			id="cursorRing"></div>
+		<canvas id="bg3d"></canvas>
+		<div class="blob b1"></div>
+		<div class="blob b2"></div>
+		<div class="blob b3"></div>
+		<div id="dots"></div>
+		<div id="clouds"></div>
+		<div
+			id="risers"
+			aria-hidden="true"></div>
+		<div
+			class="float-deco"
+			style="top: 18%; left: 6%; font-size: 28px">
+			✦
+		</div>
+		<div
+			class="float-deco"
+			style="top: 60%; right: 8%; font-size: 24px; animation-delay: 1.5s">
+			♡
+		</div>
+		<div
+			class="float-deco"
+			style="bottom: 20%; left: 10%; font-size: 22px; animation-delay: 2.5s">
+			★
+		</div>
+
+		<div class="content">
+			<nav>
+				<a
+					class="logo"
+					href="#"
+					data-hover
+					>BX♡DEV</a
+				>
+				<div class="links">
+					<a
+						href="#stage3d"
+						data-hover
+						>3D 展厅</a
+					>
+					<a
+						href="#works"
+						data-hover
+						>作品</a
+					>
+					<a
+						href="#about"
+						data-hover
+						>关于</a
+					>
+					<a
+						href="#contact"
+						data-hover
+						>联系</a
+					>
+				</div>
+			</nav>
+
+			<!-- ═══════ HERO：改名字 ═══════ -->
+			<section class="hero">
+				<div class="deco-star d1">✦</div>
+				<div class="deco-star d2">♡</div>
+				<div class="deco-star d3">★</div>
+				<div class="badge">✿ Creative Developer / 3D 爱好者</div>
+				<h1>
+					<span class="line p">BAIXUE</span><br />
+					<span class="line l">CODE × DESIGN</span><br />
+					<span class="line o">× 3D WORLD</span>
+				</h1>
+				<p class="role">
+					前端工程师，也会 <b>Blender 建模</b>、<b>UI设计</b>、<b>3D 模型玩家</b
+					>和<b>绘画表情包</b>。写代码的手，也在捏模型♪
+				</p>
+				<div class="cta">
+					<a
+						class="btn primary"
+						href="https://bbdcsg.love"
+						target="_blank"
+						rel="noopener"
+						data-hover
+						>我的小站 ↗</a
+					>
+					<a
+						class="btn ghost"
+						href="#contact"
+						data-hover
+						>联系我</a
+					>
+				</div>
+			</section>
+
+			<div class="marquee">
+				<div
+					class="track"
+					id="marquee">
+					<span class="hl">Three.js</span><i>✦</i><span>Blender</span><i>✦</i
+					><span class="hl">WebGL</span><i>✦</i> <span>产品设计</span><i>✦</i
+					><span class="hl">GSAP</span><i>✦</i><span>3D 模型</span><i>✦</i>
+					<span class="hl">UI/UX</span><i>✦</i><span>表情包设计</span><i>✦</i>
+				</div>
+			</div>
+
+			<!-- ═══════ 3D 展厅：把 model.glb 放到 models/ 文件夹 ═══════ -->
+			<section id="stage3d">
+				<div class="sec-head reveal">
+					<div class="num">✿ 01 · 3D SHOWCASE</div>
+					<h2><em>3D</em> 展厅</h2>
+				</div>
+				<div class="stage reveal">
+					<canvas id="modelCanvas"></canvas>
+					<div class="hint">♡ 拖拽旋转 · 滚轮缩放</div>
+					<div
+						class="fallback"
+						id="modelFallback">
+						模型正在赶来的路上…
+					</div>
+				</div>
+			</section>
+
+			<!-- ═══════ 作品 ═══════ -->
+			<section id="works">
+				<div class="sec-head reveal">
+					<div class="num">✿ 02 · SELECTED WORKS</div>
+					<h2>其他<em>作品</em></h2>
+				</div>
+				<div class="works">
+					<div
+						class="work reveal"
+						data-cat="blender">
+						<div
+							class="visual"
+							data-hover>
+							<div
+								class="slider"
+								data-slider>
+								<img
+									src="images/blender-1.jpg"
+									alt="Blender 作品 1" />
+								<img
+									src="images/blender-2.jpg"
+									alt="Blender 作品 2" />
+								<img
+									src="images/blender-3.jpg"
+									alt="Blender 作品 3" />
+								<button
+									class="s-arrow prev"
+									data-hover
+									aria-label="上一张">
+									‹
+								</button>
+								<button
+									class="s-arrow next"
+									data-hover
+									aria-label="下一张">
+									›
+								</button>
+								<div class="s-counter">1/3</div>
+							</div>
+						</div>
+						<div class="info">
+							<div class="idx">NO.001</div>
+							<h3>Blender 小模型系列</h3>
+							<p>
+								Low Poly
+								风格小场景系列：赛博朋克控制室、机甲头盔、万圣节小屋。建模、材质、灯光、渲染全流程独立完成——用最少的面，讲完整的故事。
+							</p>
+							<div class="tags">
+								<span>Blender</span><span>Low Poly</span><span>场景渲染</span>
+							</div>
+						</div>
+					</div>
+
+					<div
+						class="work reveal"
+						data-cat="design">
+						<div
+							class="visual"
+							data-hover>
+							<div
+								class="slider"
+								data-slider>
+								<img
+									src="images/design-1.jpg"
+									alt="UI 设计 1" />
+								<img
+									src="images/design-2.jpg"
+									alt="UI 设计 2" />
+								<img
+									src="images/design-3.jpg"
+									alt="UI 设计 3" />
+								<img
+									src="images/design-4.jpg"
+									alt="UI 设计 4" />
+								<img
+									src="images/design-5.jpg"
+									alt="UI 设计 5" />
+								<img
+									src="images/design-6.jpg"
+									alt="UI 设计 6" />
+								<button
+									class="s-arrow prev"
+									data-hover
+									aria-label="上一张">
+									‹
+								</button>
+								<button
+									class="s-arrow next"
+									data-hover
+									aria-label="下一张">
+									›
+								</button>
+								<div class="s-counter">1/3</div>
+							</div>
+						</div>
+						<div class="info">
+							<div class="idx">NO.002</div>
+							<h3>UI 设计 · Rees 兴趣社交</h3>
+							<p>
+								兴趣社交
+								App：从日程管理、计划发布到临时拼团、限时群聊的完整流程。数十个页面独立设计，含设计规范；前端背景让我能把设计稿直接还原成可交互原型。
+							</p>
+							<div class="tags">
+								<span>UI 设计</span><span>Figma</span><span>设计系统</span>
+							</div>
+						</div>
+					</div>
+
+					<div
+						class="work reveal"
+						data-cat="print">
+						<div
+							class="visual"
+							data-hover>
+							<div
+								class="slider"
+								data-slider>
+								<img
+									src="images/print-1.jpg"
+									alt="3D 模型 1" />
+								<img
+									src="images/print-2.jpg"
+									alt="3D 模型 2" />
+								<img
+									src="images/print-3.jpg"
+									alt="3D 模型 3" />
+								<img
+									src="images/print-4.jpg"
+									alt="3D 模型 4" />
+								<button
+									class="s-arrow prev"
+									data-hover
+									aria-label="上一张">
+									‹
+								</button>
+								<button
+									class="s-arrow next"
+									data-hover
+									aria-label="下一张">
+									›
+								</button>
+								<div class="s-counter">1/3</div>
+							</div>
+						</div>
+						<div class="info">
+							<div class="idx">NO.003</div>
+							<h3>3D 模型 · Q 版角色手办</h3>
+							<p>
+								Q
+								版角色手办系列：建模、拆件、打磨到涂装，全流程独立完成。从数字模型到桌上成品，每一步都是手艺。
+							</p>
+							<div class="tags">
+								<span>3D 模型</span><span>角色手办</span><span>涂装</span>
+							</div>
+						</div>
+					</div>
+
+					<div
+						class="work reveal"
+						data-cat="sticker">
+						<div
+							class="visual"
+							data-hover>
+							<div
+								class="slider"
+								data-slider>
+								<img
+									src="images/sticker-1.jpg"
+									alt="表情包 1" />
+								<img
+									src="images/sticker-2.gif"
+									alt="表情包 2" />
+								<img
+									src="images/sticker-3.jpg"
+									alt="表情包 3" />
+								<button
+									class="s-arrow prev"
+									data-hover
+									aria-label="上一张">
+									‹
+								</button>
+								<button
+									class="s-arrow next"
+									data-hover
+									aria-label="下一张">
+									›
+								</button>
+								<div class="s-counter">1/3</div>
+							</div>
+						</div>
+						<div class="info">
+							<div class="idx">NO.004</div>
+							<h3>表情包 · 大喵宝宝的日常</h3>
+							<p>
+								原创英短渐层猫表情，共 9
+								个。已上架微信表情平台，开通赞赏功能。日常聊天高频全覆盖：道歉、卖萌、疑问、躺平。
+							</p>
+							<div class="tags">
+								<span>表情包</span><span>IP 形象</span><span>插画</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- ═══════ 关于 ═══════ -->
+			<section id="about">
+				<div class="sec-head reveal">
+					<div class="num">✿ 03 · ABOUT</div>
+					<h2>关于<em>我</em></h2>
+				</div>
+				<div class="about-wrap reveal">
+					<p class="big">
+						我写代码，也捏模型。我相信
+						<em>前端 × 3D × 设计</em> 交叉的地方，会长出最可爱的东西♡
+					</p>
+					<p>
+						8 年前端开发经验，主业写代码，业余接私活——UI
+						设计稿到可交互页面交付。爱玩3D：Blender 、Zbrush
+						捏模型、做手办涂装，画了两套上架表情包。
+					</p>
+					<p>
+						想找一份能把「前端 × 设计 ×
+						3D」一起用上的工作；私活也持续开放：网站、小程序、UI
+						设计、模型相关，都可以聊。
+					</p>
+					<div class="skills">
+						<div
+							class="skill"
+							data-hover>
+							<div class="v">前端</div>
+							<div class="k">TS / Vue / React</div>
+						</div>
+						<div
+							class="skill"
+							data-hover>
+							<div class="v">3D</div>
+							<div class="k">Blender / Zbrush / Three.js</div>
+						</div>
+						<div
+							class="skill"
+							data-hover>
+							<div class="v">设计</div>
+							<div class="k">Figma / PS / AE / AI</div>
+						</div>
+						<div
+							class="skill"
+							data-hover>
+							<div class="v">落地</div>
+							<div class="k">3D 模型 / 实物</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- ═══════ 联系 ═══════ -->
+			<section
+				id="contact"
+				class="contact-sec">
+				<div class="sec-head reveal">
+					<div class="num">✿ 04 · CONTACT</div>
+					<h2>来聊点<em>有意思</em>的</h2>
+				</div>
+				<a
+					class="mail reveal"
+					href="mailto:xuebai839@gmail.com"
+					data-hover
+					>xuebai839@gmail.com ♡</a
+				>
+			</section>
+
+			<footer>
+				<span>© 2026 BAIXUE</span>
+				<span>手写 HTML + Three.js + GSAP · 包括这个网页</span>
+			</footer>
+		</div>
+
+		<!-- ═══ Q版萌娘：纯SVG手绘，以后可换成你自己的立绘PNG ═══ -->
+		<div
+			id="chibi"
+			aria-hidden="true">
+			<img
+				src="images/chibi-hi.png"
+				alt="Q版萌娘挥手" />
+		</div>
+		<div class="chibi-bubble">看我做的模型 ↓ ♡</div>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+		<script src="https://unpkg.com/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+		<script>
+			/* ═════════ 0. 加载屏：所有资源加载完才放行 ═════════ */
+			(function () {
+				const loader = document.getElementById("loader");
+				const t0 = Date.now();
+				function done() {
+					const wait = Math.max(0, 1200 - (Date.now() - t0)); // 最少展示 1.2s，不闪一下就没
+					setTimeout(() => {
+						loader.classList.add("done");
+						window.__pageReady = true;
+					}, wait);
+				}
+				if (document.readyState === "complete") done();
+				else addEventListener("load", done);
+				setTimeout(() => {
+					loader.classList.add("done");
+					window.__pageReady = true;
+				}, 6000); // 6s 兜底
+			})();
+
+			/* ═════════ 1. 背景：粉彩粒子云（库失败则跳过）═════════ */
+			try {
+				if (window.THREE) {
+					(function () {
+						const canvas = document.getElementById("bg3d");
+						const renderer = new THREE.WebGLRenderer({
+							canvas,
+							antialias: true,
+							alpha: true
+						});
+						renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+						const scene = new THREE.Scene();
+						const camera = new THREE.PerspectiveCamera(
+							60,
+							innerWidth / innerHeight,
+							0.1,
+							100
+						);
+						camera.position.set(0, 0, 9);
+
+						const COUNT = 500;
+						const pos = new Float32Array(COUNT * 3),
+							col = new Float32Array(COUNT * 3);
+						const palette = [
+							new THREE.Color(0xffb7dd),
+							new THREE.Color(0xd7c2ff),
+							new THREE.Color(0xb5ecdc),
+							new THREE.Color(0xffe3a3)
+						];
+						for (let i = 0; i < COUNT; i++) {
+							pos[i * 3] = (Math.random() - 0.5) * 24;
+							pos[i * 3 + 1] = (Math.random() - 0.5) * 14;
+							pos[i * 3 + 2] = (Math.random() - 0.5) * 10;
+							const c = palette[Math.floor(Math.random() * palette.length)];
+							col[i * 3] = c.r;
+							col[i * 3 + 1] = c.g;
+							col[i * 3 + 2] = c.b;
+						}
+						const geo = new THREE.BufferGeometry();
+						geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+						geo.setAttribute("color", new THREE.BufferAttribute(col, 3));
+						const mat = new THREE.PointsMaterial({
+							size: 0.09,
+							vertexColors: true,
+							transparent: true,
+							opacity: 0.55,
+							depthWrite: false
+						});
+						const points = new THREE.Points(geo, mat);
+						scene.add(points);
+
+						const knot = new THREE.Mesh(
+							new THREE.TorusKnotGeometry(1.5, 0.45, 120, 16),
+							new THREE.MeshBasicMaterial({
+								wireframe: true,
+								color: 0xd7c2ff,
+								transparent: true,
+								opacity: 0.18
+							})
+						);
+						knot.position.set(4, 0.5, -3);
+						scene.add(knot);
+
+						let mx = 0,
+							my = 0,
+							tx = 0,
+							ty = 0;
+						addEventListener("mousemove", (e) => {
+							mx = (e.clientX / innerWidth - 0.5) * 2;
+							my = (e.clientY / innerHeight - 0.5) * 2;
+						});
+						addEventListener("resize", () => {
+							camera.aspect = innerWidth / innerHeight;
+							camera.updateProjectionMatrix();
+							renderer.setSize(innerWidth, innerHeight);
+						});
+						renderer.setSize(innerWidth, innerHeight);
+
+						const clock = new THREE.Clock();
+						(function tick() {
+							requestAnimationFrame(tick);
+							const t = clock.getElapsedTime();
+							tx += (mx - tx) * 0.04;
+							ty += (my - ty) * 0.04;
+							points.rotation.y = t * 0.03 + tx * 0.15;
+							points.rotation.x = ty * 0.06;
+							points.position.y = Math.sin(t * 0.5) * 0.25;
+							knot.rotation.x = t * 0.12;
+							knot.rotation.y = t * 0.16;
+							renderer.render(scene, camera);
+						})();
+					})();
+				}
+			} catch (e) {
+				console.warn("背景跳过:", e);
+			}
+
+			/* ═════════ 2. 3D 展厅（库失败则显示提示）═════════ */
+			try {
+				if (window.THREE && THREE.GLTFLoader) {
+					(function () {
+						const canvas = document.getElementById("modelCanvas");
+						const fallback = document.getElementById("modelFallback");
+						const renderer = new THREE.WebGLRenderer({
+							canvas,
+							antialias: true,
+							alpha: true
+						});
+						renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+						const scene = new THREE.Scene();
+						const camera = new THREE.PerspectiveCamera(45, 2, 0.1, 100);
+						camera.position.set(0, 0, 5);
+
+						// 与 test-3d.html 完全相同的灯光配方（已验证能出颜色）
+						scene.add(new THREE.AmbientLight(0xffffff, 1.2));
+						const key = new THREE.DirectionalLight(0xffffff, 0.8);
+						key.position.set(3, 5, 5);
+						scene.add(key);
+
+						const group = new THREE.Group();
+						scene.add(group);
+						const pivot = new THREE.Group();
+						group.add(pivot); // 模型挂在 pivot 里，拖拽只转 pivot
+						// 粉色底座圆盘
+
+						let mixer = null;
+
+						/* 百分位包围盒：忽略离群顶点（游离点/超大地面），只按模型主体缩放居中 */
+						function robustBox(model) {
+							const pts = [];
+							model.updateMatrixWorld(true);
+							model.traverse((o) => {
+								if (o.isMesh && o.visible && o.geometry.attributes.position) {
+									const arr = o.geometry.attributes.position.array;
+									const v = new THREE.Vector3();
+									for (let i = 0; i < arr.length; i += 3) {
+										v.set(arr[i], arr[i + 1], arr[i + 2]).applyMatrix4(
+											o.matrixWorld
+										);
+										pts.push(v.clone());
+									}
+								}
+							});
+							if (!pts.length) return null;
+							const axes = [[], [], []];
+							for (const p of pts) {
+								axes[0].push(p.x);
+								axes[1].push(p.y);
+								axes[2].push(p.z);
+							}
+							const lo = [0, 0, 0],
+								hi = [0, 0, 0];
+							axes.forEach((a, i) => {
+								a.sort((x, y) => x - y);
+								lo[i] = a[Math.floor(a.length * 0.02)]; // 2% 分位
+								hi[i] =
+									a[Math.min(a.length - 1, Math.ceil(a.length * 0.98) - 1)]; // 98% 分位
+							});
+							return new THREE.Box3(
+								new THREE.Vector3(lo[0], lo[1], lo[2]),
+								new THREE.Vector3(hi[0], hi[1], hi[2])
+							);
+						}
+
+						new THREE.GLTFLoader().load(
+							"models/model.glb",
+							(gltf) => {
+								const model = gltf.scene;
+
+								/* 第一步：按名字识别背景板/地面并隐藏 */
+								const bgRegex =
+									/^(bg|background|ground|plane|floor|地面|地板|背景)/i;
+								let hiddenBg = 0;
+								model.traverse((o) => {
+									if (
+										o.isMesh &&
+										(bgRegex.test(o.name || "") ||
+											bgRegex.test(o.parent?.name || ""))
+									) {
+										o.visible = false;
+										hiddenBg++;
+									}
+								});
+
+								/* 第二步：只按可见主体算包围盒 */
+								const rawBox = new THREE.Box3().setFromObject(model);
+								const rawSize = rawBox.getSize(new THREE.Vector3()).length();
+								const box = robustBox(model) || rawBox;
+								const size = box.getSize(new THREE.Vector3()).length();
+								let meshCount = 0;
+								model.traverse((o) => {
+									if (o.isMesh && o.visible) meshCount++;
+								});
+								console.log(
+									"[3D展厅] 原始包围盒:",
+									rawSize.toFixed(2),
+									"· 主体包围盒:",
+									size.toFixed(2),
+									"· mesh 数量:",
+									meshCount,
+									"· 隐藏背景板:",
+									hiddenBg
+								);
+								// 原始尺度下测真实包围盒（蒙皮网格采样渲染顶点，普通网格用自带包围盒）
+								model.updateMatrixWorld(true);
+								const allBox = new THREE.Box3();
+								model.traverse((o) => {
+									if (!(o.isMesh && o.visible)) return;
+									if (o.isSkinnedMesh && o.skeleton) {
+										try {
+											if (o.skeleton.update) o.skeleton.update();
+											const pos = o.geometry.attributes.position;
+											const v = new THREE.Vector3();
+											const step = Math.max(1, Math.floor(pos.count / 1500));
+											for (let i = 0; i < pos.count; i += step) {
+												o.boneTransform(i, v).applyMatrix4(o.matrixWorld);
+												allBox.expandByPoint(v);
+											}
+											return;
+										} catch (e) {
+											/* 采样失败退回普通包围盒 */
+										}
+									}
+									allBox.expandByObject(o);
+								});
+								// 按可视区域适配：宽≤视野72%，高≤视野80%，默认就是大的
+								const bs = allBox.getSize(new THREE.Vector3());
+								const aspect =
+									canvas.clientWidth / Math.max(1, canvas.clientHeight);
+								const viewH = 2 * 5 * Math.tan(Math.PI / 8),
+									viewW = viewH * aspect;
+								const s = Math.min(
+									(viewW * 0.72) / Math.max(bs.x, 1e-6),
+									(viewH * 0.8) / Math.max(bs.y, 1e-6)
+								);
+								model.scale.setScalar(s);
+								allBox.applyMatrix4(new THREE.Matrix4().makeScale(s, s, s));
+								// 完全居中（无底座，中心对准视野中心）
+								const allC = allBox.getCenter(new THREE.Vector3());
+								pivot.position.set(0, 0, 0);
+								model.position.set(-allC.x, -allC.y, -allC.z);
+								model.traverse((o) => {
+									if (o.isMesh) {
+										o.frustumCulled = false; // 防错误剔除（outline 壳的 side 不能动！）
+										if (o.material && o.material.metalness !== undefined)
+											o.material.metalness = 0;
+									}
+								});
+								const isDebug = new URLSearchParams(location.search).has(
+									"debug"
+								);
+								if (isDebug) {
+									// ?debug 彩虹调试模式
+									model.traverse((o) => {
+										if (o.isMesh && o.visible) {
+											o.material = new THREE.MeshNormalMaterial();
+											const bb = new THREE.Box3().setFromObject(o);
+											const bs = bb.getSize(new THREE.Vector3());
+											console.log(
+												"[mesh]",
+												o.name || "(未命名)",
+												"· 顶点",
+												o.geometry.attributes.position.count,
+												"· 尺寸",
+												bs.x.toFixed(2),
+												bs.y.toFixed(2),
+												bs.z.toFixed(2),
+												"· 中心",
+												bb.getCenter(new THREE.Vector3()).x.toFixed(2),
+												bb.getCenter(new THREE.Vector3()).y.toFixed(2),
+												bb.getCenter(new THREE.Vector3()).z.toFixed(2)
+											);
+										}
+									});
+									console.log(
+										"[3D展厅] debug 模式：材质已替换为法线材质，且暂停动画"
+									);
+								}
+								pivot.add(model);
+								const wantAnim = new URLSearchParams(location.search).has(
+									"anim"
+								);
+								if (
+									!isDebug &&
+									wantAnim &&
+									gltf.animations &&
+									gltf.animations.length
+								) {
+									// 默认静止，加 ?anim 播放
+									mixer = new THREE.AnimationMixer(model);
+									mixer.clipAction(gltf.animations[0]).play();
+									console.log(
+										"[3D展厅] 动画播放中（共" + gltf.animations.length + "条）"
+									);
+								}
+								fallback.style.display = "none";
+							},
+							undefined,
+							(err) => {
+								console.warn("[3D展厅] 加载失败:", err);
+							}
+						);
+
+						let dragging = false,
+							px = 0,
+							py = 0,
+							vx = 0,
+							vy = 0,
+							targetX = 0.12,
+							targetY = 0; // 无自转，仅轻微初始仰角
+						let camZ = 5,
+							camZT = 5; // 滚轮缩放（当前值/目标值）
+						canvas.addEventListener(
+							"wheel",
+							(e) => {
+								e.preventDefault();
+								camZT = Math.min(8, Math.max(2.6, camZT + e.deltaY * 0.004));
+							},
+							{ passive: false }
+						);
+						canvas.addEventListener("pointerdown", (e) => {
+							dragging = true;
+							px = e.clientX;
+							py = e.clientY;
+							canvas.setPointerCapture(e.pointerId);
+						});
+						addEventListener("pointerup", () => (dragging = false));
+						addEventListener("pointermove", (e) => {
+							if (dragging) {
+								vy = (e.clientX - px) * 0.008;
+								vx = (e.clientY - py) * 0.008;
+								targetY += vy;
+								targetX += vx;
+								px = e.clientX;
+								py = e.clientY;
+							}
+						});
+
+						function resize() {
+							const w = canvas.clientWidth,
+								h = canvas.clientHeight;
+							if (
+								canvas.width !== Math.floor(w * renderer.getPixelRatio()) ||
+								canvas.height !== Math.floor(h * renderer.getPixelRatio())
+							) {
+								renderer.setSize(w, h, false);
+								camera.aspect = w / h;
+								camera.updateProjectionMatrix();
+							}
+						}
+						(function tick() {
+							requestAnimationFrame(tick);
+							resize();
+							if (!dragging) {
+								vy *= 0.95;
+								vx *= 0.95;
+								targetY += vy;
+								targetX += vx;
+							} // 惯性，无自转无回中
+							pivot.rotation.x += (targetX - pivot.rotation.x) * 0.12;
+							pivot.rotation.y += (targetY - pivot.rotation.y) * 0.12;
+							camZ += (camZT - camZ) * 0.12;
+							camera.position.z = camZ;
+							if (mixer) mixer.update(1 / 60);
+							renderer.render(scene, camera);
+						})();
+					})();
+				} else {
+					document.getElementById("modelFallback").textContent =
+						"Three.js 加载失败，请检查网络后刷新";
+				}
+			} catch (e) {
+				console.warn("3D 展厅跳过:", e);
+			}
+
+			/* ═════════ 3. 自定义光标（纯原生）═════════ */
+			(function () {
+				if (matchMedia("(hover:none)").matches) return;
+				const dot = document.getElementById("cursor"),
+					ring = document.getElementById("cursorRing");
+				let x = 0,
+					y = 0,
+					rx = 0,
+					ry = 0;
+				addEventListener("mousemove", (e) => {
+					x = e.clientX;
+					y = e.clientY;
+					dot.style.transform = `translate(${x}px,${y}px) translate(-50%,-50%)`;
+				});
+				(function loop() {
+					rx += (x - rx) * 0.14;
+					ry += (y - ry) * 0.14;
+					ring.style.transform = `translate(${rx}px,${ry}px) translate(-50%,-50%)`;
+					requestAnimationFrame(loop);
+				})();
+				document
+					.querySelectorAll("a,[data-hover],.work .tags span")
+					.forEach((el) => {
+						el.addEventListener("mouseenter", () =>
+							document.body.classList.add("hovering")
+						);
+						el.addEventListener("mouseleave", () =>
+							document.body.classList.remove("hovering")
+						);
+					});
+			})();
+
+			/* ═════════ 4. GSAP 动画（库挂了就原生兜底）═════════ */
+			(function () {
+				if (window.gsap && window.ScrollTrigger) {
+					gsap.registerPlugin(ScrollTrigger);
+					gsap.from(".hero .line", {
+						y: 60,
+						opacity: 0,
+						rotation: 4,
+						duration: 1,
+						stagger: 0.15,
+						ease: "back.out(1.6)",
+						delay: 1.2
+					});
+					gsap.from(".hero .badge,.hero .role,.hero .cta", {
+						opacity: 0,
+						y: 24,
+						duration: 0.9,
+						delay: 1.6,
+						stagger: 0.12
+					});
+					gsap.from(".hero .deco-star", {
+						opacity: 0,
+						scale: 0,
+						duration: 0.8,
+						delay: 1.9,
+						stagger: 0.15,
+						ease: "back.out(2)"
+					});
+					gsap.utils.toArray(".reveal").forEach((el) => {
+						gsap.to(el, {
+							opacity: 1,
+							y: 0,
+							duration: 0.9,
+							ease: "back.out(1.5)",
+							scrollTrigger: { trigger: el, start: "top 85%" }
+						});
+					});
+				} else {
+					document.querySelectorAll(".reveal").forEach((el) => {
+						el.style.opacity = 1;
+						el.style.transform = "none";
+					});
+				}
+				const mq = document.getElementById("marquee");
+				if (mq) mq.innerHTML += mq.innerHTML;
+			})();
+
+			/* ═════════ 5.8 导航：JS 平滑滚动 + 当前区块高亮 ═════════ */
+			(function () {
+				const links = [...document.querySelectorAll("nav .links a")];
+				const secs = links
+					.map((a) => document.querySelector(a.getAttribute("href")))
+					.filter(Boolean);
+				document.querySelector("nav .logo").addEventListener("click", (e) => {
+					e.preventDefault();
+					window.scrollTo({ top: 0, behavior: "smooth" }); // logo 回顶部
+				});
+				links.forEach((a) =>
+					a.addEventListener("click", (e) => {
+						e.preventDefault(); // 掐死默认导航，杜绝跳页/新开
+						const sec = document.querySelector(a.getAttribute("href"));
+						if (!sec) return;
+						const head = sec.querySelector(".sec-head") || sec; // 滚到标题，不落空白区
+						head.scrollIntoView({ behavior: "smooth", block: "start" });
+					})
+				);
+				function update() {
+					const y = window.scrollY + 160;
+					let cur = 0;
+					secs.forEach((s, i) => {
+						if (s.offsetTop <= y) cur = i;
+					});
+					links.forEach((a, i) => a.classList.toggle("active", i === cur));
+				}
+				addEventListener("scroll", update, { passive: true });
+				addEventListener("load", update);
+			})();
+
+			/* ═════════ 5.9 作品轮播：整页切换 + 首尾环绕滑动 + 悬停暂停 ═════════ */
+			(function () {
+				document.querySelectorAll(".slider").forEach((slider) => {
+					// 若 markup 里没有 s-track，先把裸 img 包一层（老结构兼容）
+					let track = slider.querySelector(".s-track");
+					if (!track) {
+						track = document.createElement("div");
+						track.className = "s-track";
+						slider
+							.querySelectorAll(":scope > img")
+							.forEach((im) => track.appendChild(im));
+						slider.prepend(track);
+					}
+					const n = track.children.length;
+					if (n < 2) {
+						slider
+							.querySelectorAll(".s-arrow")
+							.forEach((a) => (a.style.display = "none"));
+						return;
+					}
+					track.innerHTML += track.innerHTML; // 克隆一套，环绕时向前滑不回头
+					const counter = slider.querySelector(".s-counter");
+					const W = () => slider.clientWidth;
+					let idx = 0,
+						x = 0,
+						targetX = 0,
+						paused = false,
+						wrapping = false;
+
+					function go(next) {
+						const prev = idx;
+						idx = ((next % n) + n) % n;
+						if (prev === n - 1 && idx === 0) {
+							// 尾→头：向前滑到克隆位
+							targetX = -n * W();
+							wrapping = true;
+						} else if (prev === 0 && idx === n - 1) {
+							// 头→尾：先瞬移到克隆位再滑回
+							x = -n * W();
+							targetX = -(n - 1) * W();
+							track.style.transform = `translateX(${x}px)`;
+						} else {
+							targetX = -idx * W();
+						}
+						if (counter) counter.textContent = idx + 1 + "/" + n;
+					}
+					setInterval(() => {
+						if (!paused) go(idx + 1);
+					}, 3500);
+
+					slider.addEventListener("mouseenter", () => (paused = true));
+					slider.addEventListener("mouseleave", () => (paused = false));
+					slider
+						.querySelector(".s-arrow.prev")
+						.addEventListener("click", (e) => {
+							e.stopPropagation();
+							go(idx - 1);
+						});
+					slider
+						.querySelector(".s-arrow.next")
+						.addEventListener("click", (e) => {
+							e.stopPropagation();
+							go(idx + 1);
+						});
+					addEventListener("resize", () => {
+						targetX = -idx * W();
+						x = targetX;
+						track.style.transform = `translateX(${x}px)`;
+					});
+
+					(function loop() {
+						requestAnimationFrame(loop);
+						x += (targetX - x) * 0.14;
+						if (wrapping && Math.abs(targetX - x) < 1) {
+							// 抵达克隆位，悄悄归位到头
+							wrapping = false;
+							x = 0;
+							targetX = 0;
+						}
+						track.style.transform = `translateX(${x}px)`;
+					})();
+					if (counter) counter.textContent = "1/" + n;
+				});
+			})();
+
+			/* ═════════ 6. 作品卡 3D 倾斜（纯原生）═════════ */
+			document.querySelectorAll(".work .visual").forEach((card) => {
+				card.addEventListener("mousemove", (e) => {
+					const r = card.getBoundingClientRect();
+					const px = (e.clientX - r.left) / r.width - 0.5,
+						py = (e.clientY - r.top) / r.height - 0.5;
+					card.style.transform = `perspective(900px) rotateY(${px * 8}deg) rotateX(${-py * 8}deg)`;
+				});
+				card.addEventListener("mouseleave", () => {
+					card.style.transform = "perspective(900px)";
+				});
+			});
+
+			/* ═════════ 7. 追加动效合集 ═════════ */
+			(function () {
+				/* 滚动进度条 */
+				const bar = document.getElementById("progress");
+				addEventListener(
+					"scroll",
+					() => {
+						const h = document.documentElement;
+						bar.style.width =
+							(h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100 + "%";
+					},
+					{ passive: true }
+				);
+
+				/* 点击迸发小星星 */
+				const shapes = ["✦", "♡", "★", "✿", "❀"];
+				const colors = ["#ff8fc7", "#c9a7ff", "#8ce0c8", "#ffd66e"];
+				document.addEventListener("click", (e) => {
+					for (let i = 0; i < 8; i++) {
+						const s = document.createElement("span");
+						s.className = "spark";
+						s.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+						s.style.left = e.clientX + "px";
+						s.style.top = e.clientY + "px";
+						s.style.color = colors[Math.floor(Math.random() * colors.length)];
+						s.style.setProperty("--dx", Math.random() * 140 - 70 + "px");
+						s.style.setProperty("--dy", Math.random() * -130 - 10 + "px");
+						document.body.appendChild(s);
+						setTimeout(() => s.remove(), 900);
+					}
+				});
+
+				/* 英雄区标题拆成单字（悬停逐个跳舞）*/
+				document.querySelectorAll(".hero h1 .line").forEach((line) => {
+					const text = line.textContent;
+					line.textContent = "";
+					[...text].forEach((c) => {
+						const sp = document.createElement("span");
+						sp.className = "ch";
+						sp.textContent = c;
+						line.appendChild(sp);
+					});
+				});
+
+				/* 按钮吸磁 */
+				document.querySelectorAll(".btn,.contact-sec .mail").forEach((b) => {
+					b.addEventListener("mousemove", (e) => {
+						const r = b.getBoundingClientRect();
+						const x = (e.clientX - r.left - r.width / 2) * 0.22;
+						const y = (e.clientY - r.top - r.height / 2) * 0.22;
+						b.style.transform = `translate(${x}px,${y}px)`;
+					});
+					b.addEventListener("mouseleave", () => {
+						b.style.transform = "";
+					});
+				});
+			})();
+
+			/* ═════════ 8. 萌娘视差：跟着鼠标轻轻摆 ═════════ */
+			(function () {
+				const girl = document.getElementById("chibi");
+				if (!girl) return;
+				let mx = 0,
+					my = 0,
+					cx = 0,
+					cy = 0;
+				addEventListener("mousemove", (e) => {
+					mx = e.clientX / innerWidth - 0.5;
+					my = e.clientY / innerHeight - 0.5;
+				});
+				(function loop() {
+					cx += (mx - cx) * 0.05;
+					cy += (my - cy) * 0.05;
+					girl.style.transform = `translate(${cx * -18}px,${cy * -10}px) rotate(${cx * -3}deg)`;
+					requestAnimationFrame(loop);
+				})();
+			})();
+
+			/* ═════════ 10. 重力标签雨：掉落 + 堆积 + 摇晃响应 ═════════ */
+			(function () {
+				if (!window.Matter) return;
+				const { Engine, Bodies, Composite, Body } = Matter;
+				const container = document.getElementById("tagRain");
+				const WORDS = [
+					"Blender",
+					"Three.js",
+					"WebGL",
+					"Figma",
+					"UI 设计",
+					"TypeScript",
+					"Vue",
+					"React",
+					"GSAP",
+					"Low Poly"
+				];
+				const COLORS = ["#ff8fc7", "#c9a7ff", "#8ce0c8", "#ffd66e", "#f56fb2"];
+
+				let W = innerWidth,
+					H = innerHeight;
+				const engine = Engine.create();
+				engine.gravity.y = 1;
+				engine.positionIterations = 10; // 加密迭代，防高速穿墙
+				engine.velocityIterations = 8;
+
+				// 三面墙：地面 + 左右（顶部开放，让标签掉进来）
+				const walls = [
+					Bodies.rectangle(W / 2, H + 110, W * 4, 220, { isStatic: true }),
+					Bodies.rectangle(-110, H / 2, 220, H * 4, { isStatic: true }),
+					Bodies.rectangle(W + 110, H / 2, 220, H * 4, { isStatic: true })
+				];
+				Composite.add(engine.world, walls);
+
+				const tags = [];
+				function spawn(word, i) {
+					const el = document.createElement("span");
+					el.className = "ptag";
+					el.textContent = word;
+					const c = COLORS[i % COLORS.length];
+					el.style.borderColor = c;
+					el.style.color = c;
+					container.appendChild(el);
+					const w = el.offsetWidth + 6,
+						h = el.offsetHeight + 4;
+					const x = 80 + Math.random() * Math.max(40, W - 160);
+					const body = Bodies.rectangle(x, -60 - i * 46, w, h, {
+						restitution: 0.4,
+						friction: 0.35,
+						frictionAir: 0.012,
+						angle: (Math.random() - 0.5) * 0.8
+					});
+					Composite.add(engine.world, body);
+					tags.push({ body, el, w, h });
+				}
+				let rainStarted = false;
+				function startRain() {
+					if (rainStarted) return; // 防止 load 和兜底定时器重复触发
+					rainStarted = true;
+					WORDS.forEach((w, i) => setTimeout(() => spawn(w, i), 200 + i * 220));
+				}
+				if (window.__pageReady) startRain();
+				else addEventListener("load", () => setTimeout(startRain, 200));
+				setTimeout(startRain, 6500); // 兜底：load 没触发也播
+
+				// 物理循环 + DOM 同步
+				(function update() {
+					Engine.update(engine, 1000 / 60);
+					for (const t of tags) {
+						t.el.style.transform = `translate(${t.body.position.x - t.w / 2}px, ${t.body.position.y - t.h / 2}px) rotate(${t.body.angle}rad)`;
+					}
+					requestAnimationFrame(update);
+				})();
+
+				/* 设备摇晃：重力方向跟着倾斜走 */
+				let hasGyro = false;
+				addEventListener("deviceorientation", (e) => {
+					if (e.gamma == null) return;
+					hasGyro = true;
+					engine.gravity.x = Math.max(-1.2, Math.min(1.2, e.gamma / 28));
+				});
+				// iOS 需要用户手势授权
+				if (
+					typeof DeviceOrientationEvent !== "undefined" &&
+					DeviceOrientationEvent.requestPermission
+				) {
+					const ask = () => {
+						DeviceOrientationEvent.requestPermission().catch(() => {});
+						removeEventListener("click", ask);
+					};
+					addEventListener("click", ask);
+				}
+
+				/* 桌面端无陀螺仪：纯重力垂直下落，不响应鼠标 */
+
+				/* 窗口缩放：墙跟着挪 */
+				addEventListener("resize", () => {
+					W = innerWidth;
+					H = innerHeight;
+					Body.setPosition(walls[0], { x: W / 2, y: H + 110 });
+					Body.setPosition(walls[1], { x: -110, y: H / 2 });
+					Body.setPosition(walls[2], { x: W + 110, y: H / 2 });
+				});
+
+				/* 兜底回收：漏出边界的标签抓回顶部重新掉 */
+				setInterval(() => {
+					for (const t of tags) {
+						const p = t.body.position;
+						if (p.y > H + 260 || p.x < -260 || p.x > W + 260) {
+							Body.setPosition(t.body, {
+								x: 80 + Math.random() * Math.max(40, W - 160),
+								y: -60
+							});
+							Body.setVelocity(t.body, { x: 0, y: 0 });
+							Body.setAngularVelocity(t.body, 0);
+						}
+					}
+				}, 800);
+			})();
+
+			/* ═════════ 11. 背景填充：云漂移 + 符号上升 ═════════ */
+			(function () {
+				/* 云朵：不同高度/速度/大小 */
+				const cloudLayer = document.getElementById("clouds");
+				const cloudSpec = [
+					{ top: "10%", h: 34, dur: 90, delay: 0 },
+					{ top: "26%", h: 26, dur: 120, delay: -40 },
+					{ top: "48%", h: 30, dur: 105, delay: -75 },
+					{ top: "68%", h: 22, dur: 135, delay: -20 },
+					{ top: "84%", h: 28, dur: 95, delay: -60 }
+				];
+				cloudSpec.forEach((c) => {
+					const el = document.createElement("div");
+					el.className = "cloud";
+					el.style.top = c.top;
+					el.style.height = c.h + "px";
+					el.style.width = c.h * 3.2 + "px";
+					el.style.animation = `drift ${c.dur}s linear infinite`;
+					el.style.animationDelay = c.delay + "s";
+					cloudLayer.appendChild(el);
+				});
+
+				/* 上升符号：随机位置/大小/速度 */
+				const shapes = ["✦", "♡", "★", "❀", "✿", "♪"];
+				const colors = ["#ffb7dd", "#d7c2ff", "#a9e8d4", "#ffd66e", "#f56fb2"];
+				const layer = document.getElementById("risers");
+				for (let i = 0; i < 16; i++) {
+					const el = document.createElement("span");
+					el.className = "riser";
+					el.textContent = shapes[i % shapes.length];
+					el.style.left = Math.random() * 96 + "%";
+					el.style.fontSize = 13 + Math.random() * 14 + "px";
+					el.style.color = colors[i % colors.length];
+					el.style.animationDuration = 14 + Math.random() * 12 + "s";
+					el.style.animationDelay = -Math.random() * 24 + "s"; // 负延迟=进场时已分布在半路
+					layer.appendChild(el);
+				}
+			})();
+		</script>
+	</body>
+</html>
